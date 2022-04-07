@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { createContext } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Products from "./Components/Products";
+import Welcome from "./Components/Welcome";
+import useFetch from "./hooks/useFetch";
+import Home from "./Components/Home"
+import NotFound from "./Components/NotFound";
+
+export const MyContext = createContext({});
 
 function App() {
+  const products = useFetch('products.json');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <MyContext.Provider value={{products}}>
+      <div className="">
+      <Routes>
+        <Route path="/" element={<Navigate to='/welcome'/>} />
+        <Route path="/welcome" element={<Welcome></Welcome>}></Route>
+        <Route path="/home" element={<Home></Home>}>
+          <Route path="" element={<Products/>}></Route>
+        </Route>
+        <Route path="/*" element={<NotFound/>}/>
+      </Routes>
     </div>
+    </MyContext.Provider>
   );
 }
 
